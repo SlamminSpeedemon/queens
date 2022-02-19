@@ -1,18 +1,23 @@
 public class Queens {
     private String sign = "Q";
+    private BoardCore boardObject;
     private String[][] board;
     private int boardWidth;
     private int boardHeight;
-    public Queens(String[][] board, int boardWidth, int boardHeight) {
-        this.board = board;
-        this.boardWidth = boardWidth;
-        this.boardHeight = boardHeight;
+    public Queens(BoardCore boardCore) {
+        this.boardObject = boardCore;
+        this.board = boardCore.getBoard();
+        this.boardWidth = boardCore.getWidth();
+        this.boardHeight = boardCore.getHeight();
     }
 
     public String[][] placeQueen(int xPos, int yPos) {
         if (board[xPos][yPos] == "0") {
             board[xPos][yPos] = "Q";
         }
+        board = horizontals(yPos);
+        board = verticals(xPos);
+        board = diagnols(xPos, yPos);
         return board;
     }
 
@@ -37,20 +42,27 @@ public class Queens {
             i++;
         }
         i = 0;
-        while ((i + xPos) < boardWidth && (i - yPos) > 0) {
-            if (board[xPos + i][yPos + i] != "Q") board[xPos + i][yPos - i] = "x";
+        while ((i + xPos) < boardWidth && (yPos - i) > 0) {
+            if (board[xPos + i][yPos - i] != "Q") board[xPos + i][yPos - i] = "x";
             i++;
         }
         i=0;
-        while ((i + xPos) < 0 && (i + yPos) < boardHeight) {
-            if (board[xPos + i][yPos + i] != "Q") board[xPos - i][yPos + i] = "x";
+        while ((xPos - i) > 0 && (i + yPos) < boardHeight) {
+            if (board[xPos - i][yPos + i] != "Q") board[xPos - i][yPos + i] = "x";
             i++;
         }
         i=0;
         while ((xPos - i) > 0 && (yPos - i) > 0) {
-            if (board[xPos + i][yPos + i] != "Q") board[xPos - i][yPos - i] = "x";
-            i--;
+            if (board[xPos - i][yPos - i] != "Q") board[xPos - i][yPos - i] = "x";
+            i++;
         }
         return board;
+    }
+
+    public void updateQueens(BoardCore boardCore) {
+        this.boardObject = boardCore;
+        this.board = boardCore.getBoard();
+        this.boardWidth = boardCore.getWidth();
+        this.boardHeight = boardCore.getHeight();
     }
 }

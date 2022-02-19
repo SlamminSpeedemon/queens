@@ -17,4 +17,29 @@ public class BoardCore {
             }
         }
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public String[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(String[][] board) {
+        this.board = board;
+    }
+
+    public void printBoard() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                System.out.print(board[i][j] + "\t");
+            }
+            System.out.print("\n");
+        }
+    }
 }

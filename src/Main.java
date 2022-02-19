@@ -10,6 +10,11 @@ public class Main {
         if (boardHeight == 0) boardHeight = 8;
 
         String[][] mainBoard = new String[boardWidth][boardHeight];
+        BoardCore coreBoard = new BoardCore(mainBoard, boardWidth, boardHeight);
+        Queens queenHandler = new Queens(coreBoard);
+        coreBoard.setBoard(queenHandler.placeQueen(0,0));
+        queenHandler.updateQueens(coreBoard);
+        coreBoard.printBoard();
 
     }
 
