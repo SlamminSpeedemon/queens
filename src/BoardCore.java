@@ -42,4 +42,13 @@ public class BoardCore {
             System.out.print("\n");
         }
     }
+
+
+    public boolean isEqual(String[][] diffBoard) {
+        if (diffBoard == board) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
