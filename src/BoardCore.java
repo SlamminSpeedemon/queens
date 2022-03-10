@@ -52,7 +52,7 @@ public class BoardCore {
         }
     }
 
-    public void shifterAIRun(Queens queenHandler){
+    public void shifterAIRun(Queens queenHandler){ //need to change it so there is a new SHIFT method... don't do shifting here
         BoardCore coreBoard = this;
         int queenRequirement = queenHandler.getQueenCount() + 1;
         int xShifter = 0;
@@ -61,11 +61,12 @@ public class BoardCore {
         int previousQueens = queenHandler.getQueenCount();
         coreBoard.setEmpty();
         queenHandler.resetQueens(coreBoard);
+        int counter = 0;
         while (queenHandler.getQueenCount() < queenRequirement) {
-            if (shiftY) {
-                yShifter++;
-            } else {
+            if (counter % 2 == 0) {
                 xShifter++;
+            } else {
+                yShifter++;
             }
 
             for (int i = xShifter; i < coreBoard.getWidth(); i++) { //shift everything over
@@ -84,18 +85,10 @@ public class BoardCore {
             }
             coreBoard.printBoard();
             System.out.println("Got " + queenHandler.getQueenCount() +"\tyShifter is "+yShifter+"\txShifter is "+xShifter);
-            if (yShifter >= width || xShifter >= height) {
-                if (yShifter <= width) {
-                    xShifter = height;
-                    yShifter++;
-                } else {
-                    if (previousQueens == queenHandler.getQueenCount() && !shiftY) {
-                        break;
-                    } else if (previousQueens == queenHandler.getQueenCount()) {
-                        shiftY = false;
-                        yShifter = 0;
-                    }
-                }
+
+            counter++;
+            if (xShifter > width && yShifter > height) {
+                break;
             }
         }
     }
