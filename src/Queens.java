@@ -13,7 +13,7 @@ public class Queens {
     }
 
     public String[][] placeQueen(int xPos, int yPos) {
-        if (board[xPos][yPos] == "0") {
+        if (board[xPos][yPos] != "x") {
             board[xPos][yPos] = "Q";
             board = horizontals(yPos);
             board = verticals(xPos);
@@ -62,11 +62,19 @@ public class Queens {
         return board;
     }
 
-    public void updateQueens(BoardCore boardCore) {
+    public void updateQueens(BoardCore boardCore) {//also finds queens and ensures that their x's go everywhere
         this.boardObject = boardCore;
         this.board = boardCore.getBoard();
         this.boardWidth = boardCore.getWidth();
         this.boardHeight = boardCore.getHeight();
+
+        for (int i = 0; i < boardObject.getWidth(); i++) {
+            for (int j = 0; j < boardObject.getHeight(); j++) {
+                if (board[i][j].equals("Q")) {
+                    placeQueen(i,j);
+                }
+            }
+        }
     }
 
     public void resetQueens(BoardCore boardCore) {
@@ -78,6 +86,14 @@ public class Queens {
     }
 
     public int getQueenCount() {
+        queenCount = 0;
+        for (int i = 0; i < boardObject.getWidth(); i++) {
+            for (int j = 0; j < boardObject.getHeight(); j++) {
+                if (board[i][j].equals("Q")) {
+                    queenCount++;
+                }
+            }
+        }
         return queenCount;
     }
 }

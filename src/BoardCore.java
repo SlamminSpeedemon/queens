@@ -1,12 +1,19 @@
 public class BoardCore {
     private String[][] board;
+//    private String[][] prevBoard;
     private int width;
     private int height;
-    public BoardCore (String[][] board, int width, int height) {
+    private boolean debug;
+    private Queens queenHandler;
+    public BoardCore (String[][] board, int width, int height, int debugMode) {
         this.board = board;
         this.width = width;
         this.height = height;
-
+        if (debugMode == 1) {
+            debug = true;
+        } else {
+            debug = false;
+        }
         setEmpty();
     }
 
@@ -16,6 +23,16 @@ public class BoardCore {
                 board[i][j] = "0";
             }
         }
+    }
+
+    public String[][] getEmpty() {
+        String[][] returner = new String[getWidth()][getHeight()];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                returner[i][j] = "0";
+            }
+        }
+        return returner;
     }
 
     public int getWidth() {
@@ -45,51 +62,97 @@ public class BoardCore {
 
 
     public boolean isEqual(String[][] diffBoard) {
-        if (diffBoard == board) {
+        if (diffBoard.equals(board)) {
             return true;
         } else {
             return false;
         }
     }
 
-    public void shifterAIRun(Queens queenHandler){ //need to change it so there is a new SHIFT method... don't do shifting here
+//    public void setPrevBoard(String[][] board) {
+//        this.prevBoard = board;
+//    }
+    public void setQueenHandler(Queens queenHandler) {//neccessary before running any solution gen methods
+        this.queenHandler = queenHandler;
+    }
+
+    public void defaultSolution() {
+        for (int i = 0; i < this.getWidth(); i++) {
+            for (int j = 0; j < this.getHeight(); j++) {
+                this.setBoard(queenHandler.placeQueen(i,j));
+                queenHandler.updateQueens(this);
+            }
+        }
+    }
+
+    public String[][] shiftX(int x) { //uses prevBoard to shift
+        String[][] fabricatedBoard = new String[getWidth()][getHeight()];
+        fabricatedBoard = getEmpty();
+        for (int i = 0; i < this.getWidth()-1; i++) {
+            for (int j = 0; j < this.getHeight(); j++) {
+                fabricatedBoard[i+1][j] = board[i][j];
+            }
+        }
+        return fabricatedBoard;
+    }
+
+    public String[][] shiftY(int y) { //uses prevBoard to shift
+        String[][] fabricatedBoard = new String[getWidth()][getHeight()];
+        fabricatedBoard = getEmpty();
+        for (int i = 0; i < this.getWidth(); i++) {
+            for (int j = 0; j < this.getHeight()-1; j++) {
+                fabricatedBoard[i][j + 1] = board[i][j];
+            }
+        }
+        return fabricatedBoard;
+    }
+
+    public void shifterAIRun(){ //need to change it so there is a new SHIFT method... don't do shifting here
         BoardCore coreBoard = this;
+//        coreBoard.setPrevBoard(coreBoard.getBoard());
+        queenHandler.updateQueens(coreBoard);
         int queenRequirement = queenHandler.getQueenCount() + 1;
         int xShifter = 0;
         int yShifter = 0;
-        boolean shiftY = true;
-        int previousQueens = queenHandler.getQueenCount();
-        coreBoard.setEmpty();
-        queenHandler.resetQueens(coreBoard);
-        int counter = 0;
+        boolean isShiftY = true;
+        //int previousQueens = queenHandler.getQueenCount();
         while (queenHandler.getQueenCount() < queenRequirement) {
-            if (counter % 2 == 0) {
-                xShifter++;
-            } else {
+            if (isShiftY) {
                 yShifter++;
-            }
-
-            for (int i = xShifter; i < coreBoard.getWidth(); i++) { //shift everything over
-                for (int j = yShifter; j < coreBoard.getHeight(); j++) {
-                    coreBoard.setBoard(queenHandler.placeQueen(i,j));
-                    queenHandler.updateQueens(coreBoard);
+                board = shiftY(1);
+                if (debug) printBoard();
+                if (debug) System.out.println("Post Shift\n");
+                queenHandler.updateQueens(coreBoard);
+                if (debug) printBoard();
+                if (debug) System.out.println("Post Update\n");
+                for (int z = 0; z < getWidth(); z++) {
+                    queenHandler.placeQueen(z,0);
+                }
+            } else {
+                xShifter++;
+                board = shiftX(1);
+                queenHandler.updateQueens(coreBoard);
+                for (int z = 0; z < getHeight(); z++) {
+                    queenHandler.placeQueen(0,z);
                 }
             }
-            coreBoard.printBoard();
-            System.out.println("Shifted board");
-            for (int i = 0; i < coreBoard.getWidth(); i++) { //put queen in new spot
-                for (int j = 0; j < coreBoard.getHeight(); j++) {
-                    coreBoard.setBoard(queenHandler.placeQueen(i,j));
-                    queenHandler.updateQueens(coreBoard);
-                }
-            }
-            coreBoard.printBoard();
-            System.out.println("Got " + queenHandler.getQueenCount() +"\tyShifter is "+yShifter+"\txShifter is "+xShifter);
 
-            counter++;
-            if (xShifter > width && yShifter > height) {
+
+            printBoard();
+            if (debug) System.out.println("isShifty = " + isShiftY);
+            if (debug) System.out.println("XShifter: " + xShifter + "\t\tYShifter: " + yShifter);
+
+            isShiftY = !isShiftY;
+
+            if (xShifter > getWidth()) {
+                System.out.print("\n\n\nFAIL\nreverting to default solution..\n\n\n");
+                coreBoard.setEmpty();
+                defaultSolution();
                 break;
             }
+
+            if (debug) System.out.println("Current Queens: " + queenHandler.getQueenCount() + "\t\tRequired: " + queenRequirement);
+            if (debug) System.out.println("Boolean statement: " + (queenHandler.getQueenCount() < queenRequirement));
         }
     }
 }
