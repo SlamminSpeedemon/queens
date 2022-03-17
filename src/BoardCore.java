@@ -76,11 +76,11 @@ public class BoardCore {
         this.queenHandler = queenHandler;
     }
 
-    public void defaultSolution() {
+    public void defaultSolution() { //has pointer error --> passing classes and stuff around gets funky
         for (int i = 0; i < this.getWidth(); i++) {
             for (int j = 0; j < this.getHeight(); j++) {
-                this.setBoard(queenHandler.placeQueen(i,j));
                 queenHandler.updateQueens(this);
+                board = queenHandler.placeQueen(i,j);
             }
         }
     }
@@ -131,7 +131,12 @@ public class BoardCore {
             } else {
                 xShifter++;
                 board = shiftX(1);
+                if (debug) System.out.println("IS X SHIFT!");
+                if (debug) printBoard();
+                if (debug) System.out.println("Post Shift\n");
                 queenHandler.updateQueens(coreBoard);
+                if (debug) printBoard();
+                if (debug) System.out.println("Post Update\n");
                 for (int z = 0; z < getHeight(); z++) {
                     queenHandler.placeQueen(0,z);
                 }

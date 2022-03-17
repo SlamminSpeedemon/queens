@@ -17,7 +17,7 @@ public class Queens {
             board[xPos][yPos] = "Q";
             board = horizontals(yPos);
             board = verticals(xPos);
-            board = diagnols(xPos, yPos);
+            board = diagonals(xPos, yPos);
             queenCount++;
         }
 
@@ -32,13 +32,13 @@ public class Queens {
     }
 
     public String[][] verticals(int xPos) {
-        for (int i = 0; i < boardWidth; i++) {
+        for (int i = 0; i < boardHeight; i++) {
             if (board[xPos][i] != "Q") board[xPos][i] = "x";
         }
         return board;
     }
 
-    public String[][] diagnols(int xPos, int yPos){
+    public String[][] diagonals(int xPos, int yPos){
         int i = 0;
         while ((i + xPos) < boardWidth && (i + yPos) < boardHeight) {
             if (board[xPos + i][yPos + i] != "Q") board[xPos + i][yPos + i] = "x";

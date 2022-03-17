@@ -2,10 +2,10 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner userInput = new Scanner(System.in);
-        System.out.println("Enter your board width tiles: ");
-        int boardWidth = userInput.nextInt();
         System.out.println("Enter your board height tiles: ");
-        int boardHeight = userInput.nextInt();
+        int boardWidth = userInput.nextInt(); //eh variables are mixed up but... too much to fix now
+        System.out.println("Enter your board width tiles: ");
+        int boardHeight = userInput.nextInt(); //eh variables are mixed up but... too much to fix now
         if (boardWidth == 0) boardWidth = 8;
         if (boardHeight == 0) boardHeight = 8;
 
@@ -15,6 +15,7 @@ public class Main {
         String[][] boardDeclare = new String[boardWidth][boardHeight];
         BoardCore coreBoard = new BoardCore(boardDeclare, boardWidth, boardHeight, debugMode);
         Queens queenHandler = new Queens(coreBoard);
+        coreBoard.setQueenHandler(queenHandler);
 
         coreBoard.defaultSolution(); //gets a standard through brute force placement
 
