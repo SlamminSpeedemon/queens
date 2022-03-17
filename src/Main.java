@@ -6,6 +6,7 @@ public class Main {
         int boardWidth = userInput.nextInt(); //eh variables are mixed up but... too much to fix now
         System.out.println("Enter your board width tiles: ");
         int boardHeight = userInput.nextInt(); //eh variables are mixed up but... too much to fix now
+        //maybe this is a problem for the future...
         if (boardWidth == 0) boardWidth = 8;
         if (boardHeight == 0) boardHeight = 8;
 
