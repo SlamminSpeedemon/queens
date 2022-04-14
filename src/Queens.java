@@ -13,7 +13,7 @@ public class Queens {
     }
 
     public String[][] placeQueen(int xPos, int yPos) {
-        if (board[xPos][yPos] != "x") {
+        if (board[xPos][yPos] == "0" || board[xPos][yPos] == "Q") {
             board[xPos][yPos] = "Q";
             board = horizontals(yPos);
             board = verticals(xPos);
@@ -40,22 +40,22 @@ public class Queens {
 
     public String[][] diagonals(int xPos, int yPos){
         int i = 0;
-        while ((i + xPos) < boardWidth && (i + yPos) < boardHeight) {
+        while ((i + xPos ) < boardWidth && (i + yPos) < boardHeight) { //to bottom right
             if (board[xPos + i][yPos + i] != "Q") board[xPos + i][yPos + i] = "x";
             i++;
         }
         i = 0;
-        while ((i + xPos) < boardWidth && (yPos - i) > 0) {
+        while ((i + xPos) < boardWidth && (yPos - i) >= 0) { //to bottom left
             if (board[xPos + i][yPos - i] != "Q") board[xPos + i][yPos - i] = "x";
             i++;
         }
         i=0;
-        while ((xPos - i) > 0 && (i + yPos) < boardHeight) {
+        while ((xPos - i) >= 0 && (i + yPos) < boardHeight) { //to top right
             if (board[xPos - i][yPos + i] != "Q") board[xPos - i][yPos + i] = "x";
             i++;
         }
         i=0;
-        while ((xPos - i) > 0 && (yPos - i) > 0) {
+        while ((xPos - i) >= 0 && (yPos - i) >= 0) { //to top left
             if (board[xPos - i][yPos - i] != "Q") board[xPos - i][yPos - i] = "x";
             i++;
         }
